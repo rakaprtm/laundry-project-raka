@@ -42,12 +42,12 @@ if(isset($_GET['delete'])){
                         foreach ($rowTranscode as $row): ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $row['trans_code'] ?></td>
+                                <td><?php echo $row['transcode'] ?></td>
                                 <td><?php echo $row['customer_name'] ?></td>
                                 <td><?php echo $row['status'] ?></td>
                                 <td>
-                                    <a href="?page=add-user&detail=<?php echo $row['id']?>" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="?page=user&delete=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure??')" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="?page=add-trans-order&detail=<?php echo $row['id']?>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="?page=trans-order&delete=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure??')" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach ?>
