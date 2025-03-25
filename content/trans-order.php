@@ -29,7 +29,7 @@ if(isset($_GET['delete'])){
                 </div>
                 <table class="table table-bordered">
                     <thead>
-                        <tr>
+                        <tr align="center">
                             <th>No</th>
                             <th>Transcode</th>
                             <th>Customer Name</th>
@@ -37,7 +37,7 @@ if(isset($_GET['delete'])){
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody align="center">
                         <?php $no = 1;
                         foreach ($rowTranscode as $row): ?>
                             <tr>
@@ -46,7 +46,32 @@ if(isset($_GET['delete'])){
                                 <td><?php echo $row['customer_name'] ?></td>
                                 <td><?php echo $row['status'] ?></td>
                                 <td>
-                                    <a href="?page=add-trans-order&detail=<?php echo $row['id']?>" class="btn btn-primary btn-sm">Edit</a>
+                                     <?php if ($row['status'] == 0) { ?>
+                                                        <?php
+                                                        if (isset($_POST['pickup'])) {
+                                                            $id = $_GET['idPick'];
+                                                            $status = $_POST['status'];
+                                                            $sqlDetail = mysqli_query($koneksi, "UPDATE trans_order SET status = '$status' WHERE id = '$id'");
+
+                                                            echo "<script>window.location.href='?page=trans-order&pickup=success';</script>";
+                                                        }
+                                                        ?>
+                                                        <form action="?page=trans-order&idPick=<?php echo $row['id'] ?>" method="post">
+                                                            <input type="hidden" name="status" value="1">
+                                                            <button type="submit" class="btn btn-primary btn-sm" name="pickup">PICKUP</button>
+                                                        </form>
+                                                    <?php } elseif ($row['status'] == 2) { ?>
+                                                        <a href="?page=pay-transaction&idPay=<?= $row['id'] ?>" class="btn btn-primary btn-sm">PAYMENT</a>
+                                                    <?php } else { ?>
+                                                        <a href="#" class="btn btn-primary btn-sm">HAS PICKUP</a>
+                                                    <?php } ?>
+
+                                                    <?php if ($row['pay'] > 0) { ?>
+        <a href="?page=detailorder&id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">DETAILS</a>
+    <?php } else { ?>
+        <button class="btn btn-warning btn-sm" disabled>DETAILS</button>
+    <?php } ?>
+
                                     <a href="?page=trans-order&delete=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure??')" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>

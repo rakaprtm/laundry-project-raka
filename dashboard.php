@@ -126,13 +126,16 @@ $rowCustomer = mysqli_fetch_all($queryCustomer, MYSQLI_ASSOC);
             let currentCount = parseInt(countDisplay.value) || 0;
             currentCount++;
             countDisplay.value = currentCount;
+            let select = document.getElementById("id_service");
+            let selectOpt = select.options[select.selectedIndex];
+
             let service_name = $('#id_service').find("option:selected").text()
             let service_price = $('#service_price').val()
             let newRow = "";
             newRow += "<tr>"
             newRow += `<td> ${currentCount} </td>`;
-            newRow += `<td> ${service_name} <input type='text' name='service_name' value='${service_name}'> </td>`;
-            newRow += `<td> ${service_price.toLocaleString()} </td>`;
+            newRow += `<td> ${service_name} <input type='text' name='service_name[]' value='${service_name}'> </td>`;
+            newRow += `<td> ${service_price.toLocaleString()} <input type='text' name='subtotal[]' value=' ${service_price.toLocaleString()}' > </td>`;
             newRow += "<td><input class='form-control' name='qty[]' type='number' > </td>";
             newRow += "<td><input class='form-control' name='notes[]' type='text' > </td>";
             
@@ -147,14 +150,6 @@ $rowCustomer = mysqli_fetch_all($queryCustomer, MYSQLI_ASSOC);
             })
 
         });
-//            alert('Testing');<?php 
-// session_start();
-// ob_start();
-// require_once 'koneksi.php';
-// $queryCustomer = mysqli_query($koneksi, "SELECT * FROM customers ORDER BY id DESC");
-// $rowCustomer = mysqli_fetch_all($queryCustomer, MYSQLI_ASSOC);
-// ?>
-//         });
     </script>
 
 </body>

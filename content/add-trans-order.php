@@ -20,20 +20,29 @@ if (isset($_POST['save'])) {
         VALUES ('$transcode', '$order_date', '$id_customer', '$order_end_date')");
 
 $id_order = mysqli_insert_id($koneksi);
-$qty = isset($_POST['qty']) ? $_POST['qty']: 0;
-$notes = isset($_POST['notes']) ? $_POST['notes']: '';
-$id_service = isset($_POST['id_service']) ? $_POST['id_service']: 0;
+$qty = isset($_POST['qty']) ? $_POST['qty']: [];
+$notes = isset($_POST['notes']) ? $_POST['notes']: [];
+$service_name = isset($_POST['service_name']) ? $_POST['service_name'] : [];
+$subtotal = isset($_POST['subtotal']) ? $_POST['subtotal'] : [];
 
+$total = 0;
 for ($i = 0; $i < $_POST['countDispaly']; $i++) {
-$service_name = $_POST['service_name']; 
-$carild_service = mysqli_query($koneksi, "SELECT id FROM services WHERE service_name = '$service_name'"); 
-$rowid_service = mysqli_fetch_assoc($carild_service);
+        $service = $service_name[$i];
+        $cariId_service = mysqli_query($koneksi, "SELECT id FROM services WHERE service_name LIKE '%$service%'");
+        $rowid_service = mysqli_fetch_assoc($cariId_service);
+        $id_service = $rowid_service['id'];
 
-$id_service = $rowid_service['id'];
+        $qty_value = $qty[$i];
+        $subtotal_value = $subtotal[$i];
+        $notes_value = $notes[$i];
 
-$instOrderDet = mysqli_query($koneksi, "INSERT INTO trans_order_detail (id_order, id_service, qty, notes) VALUES
-('$id_order', '$id_service', '$qty[$i]', '$notes[$i]')");
+        // echo $id_order . ' ' . $notes_value . ' ' . $qty_value . ' ' . $subtotal_value ;
+
+$instOrderDet = mysqli_query($koneksi, "INSERT INTO trans_order_detail (id_order, id_service, qty, subtotal, notes) VALUES ('$id_order', '$id_service', '$qty_value', '$subtotal_value', '$notes_value')");
+
+$total += ($subtotal_value * $qty_value);
 }
+$update = mysqli_query($koneksi, "UPDATE trans_order SET total='$total' WHERE id = '$id_order'");
 }
 
 if (isset($_POST['edit'])) {
